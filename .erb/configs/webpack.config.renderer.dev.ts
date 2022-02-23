@@ -9,6 +9,7 @@ import baseConfig from './webpack.config.base';
 import webpackPaths from './webpack.paths';
 import checkNodeEnv from '../scripts/check-node-env';
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
+const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
 
 // When an ESLint server is running, we can't set the NODE_ENV so we'll check if it's
 // at the dev webpack config is not accidentally run in a production environment
@@ -62,13 +63,15 @@ const configuration: webpack.Configuration = {
   module: {
     rules: [
       {
-        test: /\.s?css$/,
+        test: /\.s?(a|c)ss$/,
         use: [
           'style-loader',
           {
             loader: 'css-loader',
             options: {
-              modules: true,
+              modules: {
+                getLocalIdent: getCSSModuleLocalIdent
+              },
               sourceMap: true,
               importLoaders: 1,
             },
@@ -78,9 +81,24 @@ const configuration: webpack.Configuration = {
         include: /\.module\.s?(c|a)ss$/,
       },
       {
-        test: /\.s?css$/,
+        test: /\.s?(a|c)ss$/,
         use: ['style-loader', 'css-loader', 'sass-loader'],
         exclude: /\.module\.s?(c|a)ss$/,
+      },
+      {
+        test: /\.less$/,
+        use: [{
+            loader: 'style-loader',
+          }, {
+            loader: 'css-loader', // translates CSS into CommonJS
+          }, {
+            loader: 'less-loader', // compiles Less to CSS
+            options: {
+              lessOptions: { // If you are using less-loader@5 please spread the lessOptions to options directly
+                javascriptEnabled: true,
+              },
+            },
+        }],
       },
       // Fonts
       {

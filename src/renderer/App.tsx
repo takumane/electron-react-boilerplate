@@ -1,42 +1,66 @@
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
-import icon from '../../assets/icon.svg';
-import './App.css';
+import './reset.css';
+import styles from './App.module.sass';
+import { Button, Divider, Layout, PageHeader, Space } from 'antd';
+import TrainingCalendar from './components/TrainingCalendar';
+import logo from './logo.png';
+const { Header, Footer, Sider, Content } = Layout;
+import { Select } from 'antd';
+import Title from 'antd/lib/typography/Title';
+import Chart from './components/Chart';
+
+const { Option } = Select;
 
 const Hello = () => {
-  return (
-    <div>
-      <div className="Hello">
-        <img width="200px" alt="icon" src={icon} />
-      </div>
-      <h1>electron-react-boilerplate</h1>
-      <div className="Hello">
-        <a
-          href="https://electron-react-boilerplate.js.org/"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <button type="button">
-            <span role="img" aria-label="books">
-              📚
-            </span>
-            Read our docs
-          </button>
-        </a>
-        <a
-          href="https://github.com/sponsors/electron-react-boilerplate"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <button type="button">
-            <span role="img" aria-label="books">
-              🙏
-            </span>
-            Donate
-          </button>
-        </a>
-      </div>
-    </div>
-  );
+  return <>
+    <Layout className={styles.app}>
+      <Sider className={styles.sideBar} width={400}>
+        <div className={styles.logo}>
+          <img src={logo}/>
+          <div className={styles.oni}>ONISTRONG</div>
+        </div>
+        <Title level={2} className={styles.statName}>
+          Overview
+        </Title>
+        <div className={styles.statCard}>
+          <Title level={5} className={styles.statName}>
+            Training progress
+          </Title>
+          <div className={styles.statChart}>
+            <Chart/>
+          </div>
+        </div>
+        <div className={styles.statCard}>
+          <Title level={5} className={styles.statName}>
+            Lifts data
+          </Title>
+          <div className={styles.statChart}>
+
+          </div>
+        </div>
+      </Sider>
+      <Content className={styles.mainContent}>
+        <PageHeader className={styles.pageHeader} 
+          title={'Training Calendar'}
+          extra={<Select defaultValue="day" style={{ width: 120 }}>
+            <Option value="day">
+              Day
+            </Option>
+            <Option value="week">
+              Week
+            </Option>
+            <Option value="block">
+              Block
+            </Option>
+            <Option value="season">
+              Season
+            </Option>
+        </Select>}
+        />
+        <TrainingCalendar/>
+      </Content>
+    </Layout>
+  </>;
 };
 
 export default function App() {

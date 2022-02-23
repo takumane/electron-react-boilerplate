@@ -14,6 +14,7 @@ import baseConfig from './webpack.config.base';
 import webpackPaths from './webpack.paths';
 import checkNodeEnv from '../scripts/check-node-env';
 import deleteSourceMaps from '../scripts/delete-source-maps';
+const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
 
 checkNodeEnv('production');
 deleteSourceMaps();
@@ -52,7 +53,9 @@ const configuration: webpack.Configuration = {
           {
             loader: 'css-loader',
             options: {
-              modules: true,
+              modules: {
+                getLocalIdent: getCSSModuleLocalIdent
+              },
               sourceMap: true,
               importLoaders: 1,
             },
@@ -65,6 +68,21 @@ const configuration: webpack.Configuration = {
         test: /\.s?(a|c)ss$/,
         use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
         exclude: /\.module\.s?(c|a)ss$/,
+      },
+      {
+        test: /\.less$/,
+        use: [{
+            loader: 'style-loader',
+          }, {
+            loader: 'css-loader', // translates CSS into CommonJS
+          }, {
+            loader: 'less-loader', // compiles Less to CSS
+            options: {
+              lessOptions: { // If you are using less-loader@5 please spread the lessOptions to options directly
+                javascriptEnabled: true,
+              },
+            },
+        }],
       },
       // Fonts
       {
