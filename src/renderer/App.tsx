@@ -19,9 +19,14 @@ const Hello = () => {
           <img src={logo}/>
           <div className={styles.oni}>ONISTRONG</div>
         </div>
-        <Title level={2} className={styles.statName}>
-          Overview
-        </Title>
+        {/* <PageHeader title={'Overview'}/> */}
+        <Space>
+          <Button shape='round'>Stats</Button>
+          <Button shape='round'>Exercises</Button>
+          <Button shape='round'>Programming</Button>
+        </Space>
+        <br/>
+        <br/>
         <div className={styles.statCard}>
           <Title level={5} className={styles.statName}>
             Training progress
@@ -41,7 +46,7 @@ const Hello = () => {
       </Sider>
       <Content className={styles.mainContent}>
         <PageHeader className={styles.pageHeader} 
-          title={'Training Calendar'}
+          title={<Button type='default' shape='round' size='large'>Week 4 of 6</Button>}
           extra={<Select defaultValue="day" style={{ width: 120 }}>
             <Option value="day">
               Day
