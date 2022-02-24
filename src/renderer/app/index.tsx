@@ -26,12 +26,13 @@ type ExerciseSet = {
 }
 
 type ExerciseRecord = {
+    exercise_name: string,
     sets: ExerciseSet[]
 };
 
 type Exercises = {
     [name: string]: {
-        record: ExerciseRecord[]
+        desc?: string,
     }
 }
 
@@ -50,19 +51,19 @@ const paths = {
     },
 }
 
+// window.electron.store.set('exercises',[]);
+
 const App = () => {
     const [ newExerciseName, setNewExerciseName ] = useState('');
 
-    const [ exercises, setExercises ] = useState<Exercise[]>(window.electron.store.get('exercises') || []);
+    const [ exercises, setExercises ] = useState<Exercises>(window.electron.store.get('exercises') || {});
 
     const addExercise = useCallback(() => {
-        setExercises([
+        setExercises({
             ...exercises,
-            {
-                name: newExerciseName
-            }
-        ]);
-    },[exercises]);
+            [newExerciseName]: {}
+        });
+    },[exercises, newExerciseName]);
 
     useEffect(() => {
         window.electron.store.set('exercises', exercises);
@@ -85,8 +86,8 @@ const App = () => {
                 </div>}>
                     <Route path={paths.exercises.root} element={<div>
                         Exercises
-                        {Array.isArray(exercises) && exercises.map((exercise) => <div key={exercise.name}>
-                            {exercise.name}
+                        {Object.keys(exercises).map((exercise_name) => <div key={exercise_name}>
+                            {exercise_name}
                         </div>)}
                         <Button>
                             <Link to={paths.exercises.add}>New</Link>
