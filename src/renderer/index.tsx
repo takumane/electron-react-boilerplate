@@ -1,5 +1,5 @@
 import { render } from 'react-dom';
-import './theme.less';
-import App from './App';
+
+import App from './app/index';
 
 render(<App />, document.getElementById('root'));

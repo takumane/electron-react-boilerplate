@@ -15,6 +15,18 @@ import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 
+import Store from 'electron-store';
+
+const store = new Store();
+
+// IPC listener
+ipcMain.on('electron-store-get', async (event, val) => {
+  event.returnValue = store.get(val);
+});
+
+ipcMain.on('electron-store-set', async (event, key, val) => {
+  store.set(key, val);
+});
 export default class AppUpdater {
   constructor() {
     log.transports.file.level = 'info';
