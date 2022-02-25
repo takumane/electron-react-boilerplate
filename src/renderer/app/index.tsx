@@ -3,6 +3,10 @@ import { HashRouter, Outlet, Route, Routes, Link } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
+import parse from 'autosuggest-highlight/parse';
+import match from 'autosuggest-highlight/match';
+import Form from './Form';
 
 declare global {
     interface Window {
@@ -27,6 +31,7 @@ type ExerciseSet = {
 
 type ExerciseRecord = {
     exercise_name: string,
+    date: Date,
     sets: ExerciseSet[]
 };
 
@@ -41,38 +46,43 @@ const paths = {
         root: 'exercises',
         add: 'new',
         view: ':id',
-        edit: ':id/edit',
         record: {
             root: 'record',
             add: 'new',
             view: ':id',
-            edit: ':id/edit',
         }
     },
 }
 
 // window.electron.store.set('exercises',[]);
 
+const TABLES = {
+    EXERCISES: 'exercises'
+}
+
 const App = () => {
-    const [ newExerciseName, setNewExerciseName ] = useState('');
+    const [ exercises, setExercises ] = useState<Exercises>(window.electron.store.get(TABLES.EXERCISES) || {});
 
-    const [ exercises, setExercises ] = useState<Exercises>(window.electron.store.get('exercises') || {});
+    const [ selectedExerciseName, setSelectedExerciseName ] = useState('');
 
-    const addExercise = useCallback(() => {
+    const onNewExerciseSubmitted = useCallback((data) => {
         setExercises({
             ...exercises,
-            [newExerciseName]: {}
+            [data.name]: {
+                ...data
+            }
         });
-    },[exercises, newExerciseName]);
-
-    useEffect(() => {
-        window.electron.store.set('exercises', exercises);
+        setSelectedExerciseName(data.name);
     },[exercises]);
 
-    const onNewExerciseNameChanged = useCallback((event) => {
-        console.log('onNewExerciseNameChanged', event.target.value);
-        setNewExerciseName(event.target.value);
-    }, [setNewExerciseName]);
+    useEffect(() => {
+        window.electron.store.set(TABLES.EXERCISES, exercises);
+    },[exercises]);
+
+    const onChangeExercise = useCallback((event, newValue) => {
+        console.log('onChangeExercise', event);
+        setSelectedExerciseName(newValue);
+    }, []);
 
     return <div>
         <HashRouter>
@@ -80,15 +90,41 @@ const App = () => {
                 <Route path='/' element={<div>
                     <Typography variant='h3' component='h1'>ONISTRONG</Typography>
                     <Button>
-                        <Link to={paths.exercises.root}>Exercises</Link>
+                        <Link to={paths.exercises.root}>Exercises ({Object.keys(exercises).length})</Link>
                     </Button>
                     <Outlet/>
                 </div>}>
                     <Route path={paths.exercises.root} element={<div>
-                        Exercises
-                        {Object.keys(exercises).map((exercise_name) => <div key={exercise_name}>
-                            {exercise_name}
-                        </div>)}
+                        <Autocomplete
+                            disablePortal
+                            fullWidth={false}
+                            id="exercises"
+                            options={Object.keys(exercises)}
+                            renderInput={(params) => <TextField {...params} label="Exercises" />}
+                            value={selectedExerciseName}
+                            onChange={onChangeExercise}
+                            renderOption={(props, option, { inputValue }) => {
+                                const matches = match(option, inputValue);
+                                const parts = parse(option, matches);
+                        
+                                return (
+                                  <li {...props}>
+                                    <div>
+                                      {parts.map((part: any, index: any) => (
+                                        <span
+                                          key={index}
+                                          style={{
+                                            fontWeight: part.highlight ? 700 : 400,
+                                          }}
+                                        >
+                                          {part.text}
+                                        </span>
+                                      ))}
+                                    </div>
+                                  </li>
+                                );
+                              }}
+                        />
                         <Button>
                             <Link to={paths.exercises.add}>New</Link>
                         </Button>
@@ -97,14 +133,28 @@ const App = () => {
                         <Route path={paths.exercises.add} element={<div>
                             <div>New exercise</div>
                             <br/>
-                            <TextField
+                            <Form 
+                                id='new-exercise'
+                                onSubmit={onNewExerciseSubmitted}
+                                submitLabel={'Create'}
+                                fields={[{
+                                    name: 'name',
+                                    label: 'Exercise name',
+                                    type: 'text'
+                                },{
+                                    name: 'desc',
+                                    label: 'Description',
+                                    type: 'text'
+                                }]}
+                            />
+                            {/* <TextField
                                 label={'Name'}
                                 value={newExerciseName}
                                 onChange={onNewExerciseNameChanged}
                                 size={'small'}
                                 InputLabelProps={{ shrink: true }}
                             />
-                            <Button size='small' onClick={addExercise}>Save</Button>
+                            <Button size='small' onClick={addExercise}>Save</Button> */}
                         </div>}></Route>
                         <Route path={paths.exercises.view} element={([...args]) => {
                             console.log(args);

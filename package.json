@@ -229,7 +229,10 @@
     "@ant-design/icons": "^4.7.0",
     "@emotion/react": "^11.8.1",
     "@emotion/styled": "^11.8.1",
+    "@mui/lab": "^5.0.0-alpha.70",
     "@mui/material": "^5.4.3",
+    "@types/autosuggest-highlight": "^3.2.0",
+    "autosuggest-highlight": "^3.2.1",
     "electron-debug": "^3.2.0",
     "electron-log": "^4.4.4",
     "electron-store": "^8.0.1",
@@ -239,6 +242,7 @@
     "react": "^17.0.2",
     "react-dev-utils": "^12.0.0",
     "react-dom": "^17.0.2",
+    "react-hook-form": "^7.27.1",
     "react-router-dom": "^6.2.1",
     "react-sparklines": "^1.7.0"
   },
