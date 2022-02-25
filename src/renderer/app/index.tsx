@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { HashRouter, Outlet, Route, Routes, Link } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import parse from 'autosuggest-highlight/parse';
@@ -35,6 +36,14 @@ type ExerciseRecord = {
     sets: ExerciseSet[]
 };
 
+type Workout = {
+    exercises: ExerciseRecord[]
+};
+
+type Workouts = {
+    [timestamp: number]: Workout
+}
+
 type Exercises = {
     [name: string]: {
         desc?: string,
@@ -45,23 +54,24 @@ const paths = {
     exercises: {
         root: 'exercises',
         add: 'new',
-        view: ':id',
-        record: {
-            root: 'record',
-            add: 'new',
-            view: ':id',
-        }
+        view: ':id'
     },
+    records: {
+
+    }
 }
 
 // window.electron.store.set('exercises',[]);
 
 const TABLES = {
-    EXERCISES: 'exercises'
+    EXERCISES: 'exercises',
+    WORKOUTS: 'workouts'
 }
 
 const App = () => {
     const [ exercises, setExercises ] = useState<Exercises>(window.electron.store.get(TABLES.EXERCISES) || {});
+
+    const [ workouts, setWorkouts ] = useState<Exercises>(window.electron.store.get(TABLES.WORKOUTS) || {});
 
     const [ selectedExerciseName, setSelectedExerciseName ] = useState('');
 
@@ -88,10 +98,15 @@ const App = () => {
         <HashRouter>
             <Routes>
                 <Route path='/' element={<div>
-                    <Typography variant='h3' component='h1'>ONISTRONG</Typography>
-                    <Button>
-                        <Link to={paths.exercises.root}>Exercises ({Object.keys(exercises).length})</Link>
-                    </Button>
+                    <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
+                        <Typography variant='h3' component='h1'>ONISTRONG</Typography>
+                        <Button>
+                            <Link to={paths.exercises.root}>Exercises ({Object.keys(exercises).length})</Link>
+                        </Button>
+                        <Button>
+                            <Link to={paths.exercises.root + paths.exercises.record}>Exercises ({Object.keys(exercises).length})</Link>
+                        </Button>
+                    </Box>
                     <Outlet/>
                 </div>}>
                     <Route path={paths.exercises.root} element={<div>
@@ -147,14 +162,6 @@ const App = () => {
                                     type: 'text'
                                 }]}
                             />
-                            {/* <TextField
-                                label={'Name'}
-                                value={newExerciseName}
-                                onChange={onNewExerciseNameChanged}
-                                size={'small'}
-                                InputLabelProps={{ shrink: true }}
-                            />
-                            <Button size='small' onClick={addExercise}>Save</Button> */}
                         </div>}></Route>
                         <Route path={paths.exercises.view} element={([...args]) => {
                             console.log(args);

@@ -40,23 +40,23 @@ const Form = (props: FormProps) => {
 
                 switch(fieldDef.type) {
                     case 'date' : {
-                        return <LocalizationProvider dateAdapter={AdapterDateFns}>
+                        return <div><LocalizationProvider dateAdapter={AdapterDateFns}>
                             <DatePicker
                                 label={fieldDef.label}
                                 {...field}
                                 renderInput={(params) => <TextField id={domId} variant='filled' {...params} inputRef={field.ref}/>}
                             />
-                        </LocalizationProvider>;
+                        </LocalizationProvider></div>;
                     }
                     default : {
-                        return <TextField 
+                        return <div><TextField 
                             id={domId}
                             label={fieldDef.label}
                             type={fieldDef.type}
                             variant="filled"
                             {...field}
                             inputRef={field.ref}
-                        />;
+                        /></div>;
                     }
                 }
             }}
