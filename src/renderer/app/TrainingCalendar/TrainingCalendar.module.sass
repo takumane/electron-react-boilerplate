@@ -2,19 +2,61 @@
     
 .container
     width: 100%
-    position: absolute
-    bottom: 0
+    position: relative
+    height: 100%
+
+.scrollContent
     display: flex
     justify-content: space-between
     align-items: flex-end
+    height: 100%
 
 .day
+    height: 100%
+    display: flex
+    flex-direction: column
+    justify-content: flex-end
+    width: 100%
+    align-items: center
+    position: relative
+    cursor: pointer
+    background: transparent
+    .date
+        font-size: 12px
+        text-align: center
+        font-weight: 600
+        color: rgba($grey900, 0.6)
 
-.date
-    font-size: 12px
-    text-align: center
-    font-weigh: 600
-    .day.today &
-        background-color: $primary
+    .month
+        margin-bottom: auto
+        font-weight: 500
+        font-size: 18px
+        color: rgba($grey900, 0.7)
+    
+    .logButton
+        z-index: 2
+        position: absolute
+        top: 50%
+        left: 50%
+        transform: translate(-50%, -50%)
+        opacity: 0
+        pointer-events: none
+        background-color: $red500
         color: white
+
+        &:hover
+            background-color: $red300
+
+    
+
+    &:hover
+        background: linear-gradient(0deg, rgba($red100,0.05) 0%, rgba($cyan100,0) 100%)
+        .logButton
+            opacity: 1
+            pointer-events: auto
         
+    &.today 
+        background: linear-gradient(0deg, rgba($red100,0.15) 0%, rgba($cyan100,0) 100%)
+        .date
+            background-color: transparent
+            color: $primary

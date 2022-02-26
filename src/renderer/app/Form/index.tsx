@@ -44,7 +44,8 @@ const Form = (props: FormProps) => {
                             <DatePicker
                                 label={fieldDef.label}
                                 {...field}
-                                renderInput={(params) => <TextField id={domId} variant='filled' {...params} inputRef={field.ref}/>}
+                                renderInput={(params) => <TextField tabIndex={0} id={domId} variant='standard' 
+                                InputLabelProps={{ shrink: true }} {...params} inputRef={field.ref}/>}
                             />
                         </LocalizationProvider></div>;
                     }
@@ -53,8 +54,10 @@ const Form = (props: FormProps) => {
                             id={domId}
                             label={fieldDef.label}
                             type={fieldDef.type}
-                            variant="filled"
+                            variant='standard'
+                            InputLabelProps={{ shrink: true }}
                             {...field}
+                            tabIndex={0}
                             inputRef={field.ref}
                         /></div>;
                     }

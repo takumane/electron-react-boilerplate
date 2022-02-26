@@ -1,5 +1,6 @@
 import { render } from 'react-dom';
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
+import shadows, { Shadows } from '@mui/material/styles/shadows';
 
 import App from './app/index';
 
@@ -8,6 +9,7 @@ import './index.sass';
 import { HashRouter, Routes } from 'react-router-dom';
 
 const theme = createTheme({
+    shadows: shadows.map(() => 'none') as Shadows,
     typography: {
         fontFamily: [
             '"Poppins"',
@@ -20,11 +22,13 @@ const theme = createTheme({
         ].join(','),
     },
     components: {
+        
         MuiButton: {
             styleOverrides: {
                 root: {
                     borderRadius: 24,
-                    fontWeight: 700
+                    textTransform: 'none',
+                    fontWeight: 500,
                 },
             }, 
         }, 

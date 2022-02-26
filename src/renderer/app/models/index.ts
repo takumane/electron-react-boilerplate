@@ -1,28 +1,31 @@
 export type Exercise = {
-    name: string 
+    id: number,
+    name: string,
+    desc?: string,
 };
 
 export type ExerciseSet = {
     reps: number,
-    load: number
+    load: number,
+    rpe: number,
+    rpt: number
 }
 
 export type ExerciseRecord = {
     exercise_name: string,
-    date: Date,
+    workout_id: number,
     sets: ExerciseSet[]
 };
 
 export type Workout = {
+    timestamp: number,
     exercises: ExerciseRecord[]
 };
 
-export type Workouts = {
-    [timestamp: number]: Workout
+export type WorkoutsByTimestamp = {
+    [timestamp: string]: Workout
 }
 
-export type Exercises = {
-    [name: string]: {
-        desc?: string,
-    }
+export type ExercisesByName = {
+    [name: string]: Exercise
 }

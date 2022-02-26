@@ -1,11 +1,24 @@
+.root
+    position: fixed
+    top: 0
+    left: 0
+    height: 100vh
+    width: 100vw
+    display: flex
+    flex-direction: column
+    justify-content: stretch
+    > *
+        flex-grow: 1
+    
 .logo
     display: inline-flex
     align-items: center
     img
-        height: 24px
+        height: 32px
     .name
         margin-left: 8px
-        font-size: 16px
-        line-height: 24px
+        font-size: 48px
+        line-height: 32px
         font-weight: 700
+        letter-spacing: 0.05em
         

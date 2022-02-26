@@ -17,7 +17,67 @@ import { resolveHtmlPath } from './util';
 
 import Store from 'electron-store';
 
-const store = new Store();
+const store = new Store({
+  schema: {
+    exercise_index_counter: { type: 'number' },
+    exercise: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          id: { type: 'number' },
+          name: { type: 'string' },
+          desc: { type: 'string' }
+        }
+      }
+    },
+    record: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          workout_id: { type: 'number' },
+          exercise_name: { type: 'string' },
+          sets: {
+            type: 'array',
+            items: {
+              type: 'object',
+              properties: {
+                reps: { type: 'number' },
+                load: { type: 'number' },
+                rpe: { type: 'number' },
+                rpt: { type: 'number' }
+              }
+            }
+          }
+        }
+      }
+    },
+    workout_index_counter: { type: 'number' },
+    workout: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          id: { type: 'number' },
+          startTime: { type: 'number' },
+          endTime: { type: 'number' },
+          preparedness: { type: 'number' },
+          fatigue: { type: 'number' },
+          rating: { type: 'number' },
+        }
+      }
+    }
+  }
+});
+
+if (!store.get('workout_index_counter')) {
+  store.set('workout_index_counter', 1);
+}
+
+if (!store.get('exercise_index_counter')) {
+  store.set('exercise_index_counter', 1);
+}
 
 // IPC listener
 ipcMain.on('electron-store-get', async (event, val) => {
