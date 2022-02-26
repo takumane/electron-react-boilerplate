@@ -150,16 +150,18 @@ const App = () => {
                                                 alignItems: 'center',
                                                 width: '100%'
                                             }}>
-                                                {parts.map((part: any, index: any) => (
-                                                    <span
-                                                    key={index}
-                                                    style={{
-                                                    fontWeight: part.highlight ? 700 : 400,
-                                                    }}
-                                                    >
-                                                        {part.text}
-                                                    </span>
-                                                ))}
+                                                <div>
+                                                    {parts.map((part: any, index: any) => (
+                                                        <span
+                                                        key={index}
+                                                        style={{
+                                                        fontWeight: part.highlight ? 500 : 400,
+                                                        }}
+                                                        >
+                                                            {part.text}
+                                                        </span>
+                                                    ))}
+                                                </div>
                                                 <IconButton sx={{
                                                     marginLeft: 'auto'
                                                 }} onClick={(e) => { 
