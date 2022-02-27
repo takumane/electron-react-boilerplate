@@ -31,30 +31,36 @@ const store = new Store({
         }
       }
     },
-    record: {
+    exercise_record_index_counter: {type: 'number' },
+    exercise_record: {
       type: 'array',
       items: {
         type: 'object',
         properties: {
-          workout_id: { type: 'number' },
+          id: { type: 'number' },
+          training_session_id: { type: 'number' },
           exercise_name: { type: 'string' },
           sets: {
             type: 'array',
-            items: {
-              type: 'object',
-              properties: {
-                reps: { type: 'number' },
-                load: { type: 'number' },
-                rpe: { type: 'number' },
-                rpt: { type: 'number' }
-              }
-            }
+            items: { type: 'number' }
           }
         }
       }
     },
-    workout_index_counter: { type: 'number' },
-    workout: {
+    set_index_counter: { type: 'number' },
+    set: {
+      type: 'array',
+      properties: {
+        id: { type: 'number' },
+        reps: { type: 'number' },
+        load: { type: 'number' },
+        rest: { type: 'number' },
+        rpe: { type: 'number' },
+        rpt: { type: 'number' }
+      }
+    },
+    training_session_index_counter: { type: 'number' },
+    training_session: {
       type: 'array',
       items: {
         type: 'object',
@@ -71,12 +77,20 @@ const store = new Store({
   }
 });
 
-if (!store.get('workout_index_counter')) {
-  store.set('workout_index_counter', 1);
+if (!store.get('training_session_index_counter')) {
+  store.set('training_session_index_counter', 1);
 }
 
 if (!store.get('exercise_index_counter')) {
   store.set('exercise_index_counter', 1);
+}
+
+if (!store.get('exercise_record_index_counter')) {
+  store.set('exercise_record_index_counter', 1);
+}
+
+if (!store.get('set_index_counter')) {
+  store.set('set_index_counter', 1);
 }
 
 // IPC listener

@@ -1,37 +1,3 @@
-Fix schema of database
+Create Form for logging session.
 
-Have index for workout instead of using timestamp
-
-
-Autocomplete snippet:
-
-{/* <Autocomplete
-    disablePortal
-    fullWidth={true}
-    id="exercises"
-    options={Object.keys(exercises)}
-    renderInput={(params) => <TextField {...params} label="Exercises" />}
-    value={selectedExerciseName}
-    onChange={onChangeExercise}
-    renderOption={(props, option, { inputValue }) => {
-        const matches = match(option, inputValue);
-        const parts = parse(option, matches);
-
-        return (
-            <li {...props}>
-                <div>
-                    {parts.map((part: any, index: any) => (
-                        <span
-                        key={index}
-                        style={{
-                        fontWeight: part.highlight ? 700 : 400,
-                        }}
-                        >
-                            {part.text}
-                        </span>
-                    ))}
-                </div>
-            </li>
-        );
-    }}
-/> */}
+Create training dashboard.

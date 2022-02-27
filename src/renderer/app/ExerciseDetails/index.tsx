@@ -1,6 +1,6 @@
 import React from 'react';
 import Typography from '@mui/material/Typography';
-import DataService from '../services/data';
+import DataService from '../../services/data';
 import { useParams } from 'react-router-dom';
 
 const ExerciseDetails = () => {

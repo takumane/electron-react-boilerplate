@@ -7,18 +7,22 @@
     display: flex
     flex-direction: column
     justify-content: stretch
-    > *
-        flex-grow: 1
+    .mainContent
+        position: absolute
+        top: 0
+        left: 0
+        right: 0
+        bottom: 0
+
     
 .logo
-    display: inline-flex
+    display: flex
     align-items: center
     img
-        height: 32px
+        height: 24px
     .name
         margin-left: 8px
-        font-size: 48px
-        line-height: 32px
+        font-size: 24px
+        line-height: 24px
         font-weight: 700
         letter-spacing: 0.05em
-        
