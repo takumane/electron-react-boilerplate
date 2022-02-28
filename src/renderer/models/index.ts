@@ -16,6 +16,7 @@ export type ExerciseSet = {
 export type ExerciseRecord = {
     id: number,
     exercise_name: string,
+    training_max: number,
     training_session_id: number,
     sets: number[]
 };

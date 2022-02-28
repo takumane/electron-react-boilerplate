@@ -8,6 +8,17 @@ import { SxProps } from '@mui/system';
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import formatDuration from 'format-duration';
 
+import bell from './bell.mp3';
+
+// import SoundPlayer from 'play-sound';
+
+function playSound(url: string) {
+    const audio = new Audio(url);
+    audio.play();
+}
+
+// const soundPlayer = SoundPlayer();
+
 import styles from './Timer.module.sass';
 
 const _1_SEC = 1000;
@@ -15,6 +26,7 @@ const _1_SEC = 1000;
 const _1_MINUTE = 60 * 1000;
 
 const restTimes = [
+    30 * _1_SEC,
     _1_MINUTE,
     90 * _1_SEC,
     2 * _1_MINUTE,
@@ -30,6 +42,8 @@ type TimerProps = {
 const Timer = (props: TimerProps) => {
     const [ countdownTo, setCountdownTo ] = useState<number>(0);
 
+    const [ instance, setInstance ] = useState<number>(0);
+
     return <Paper sx={props.sx}
     >
         <Typography variant='h6'>
@@ -40,12 +54,15 @@ const Timer = (props: TimerProps) => {
         }}>
             <CountdownCircleTimer
                 isPlaying
-                key={countdownTo}
+                key={instance}
                 duration={countdownTo}
                 colors={['#de3d4f', '#de3d4f']}
                 colorsTime={[10, 0]}
                 trailColor={'rgba(0,0,0,0.2)'}
-                onComplete={() => ({ shouldRepeat: false, delay: 1 })}
+                onComplete={() => {
+                    playSound(bell);
+                    return { shouldRepeat: false, delay: 1 };
+                }}
             >
                 {({ remainingTime }) => {
                     if (remainingTime === 0) {
@@ -73,7 +90,10 @@ const Timer = (props: TimerProps) => {
                 key={duration}      
                 variant='outlined' 
                 size='small'
-                onClick={() => setCountdownTo(duration / 1000)}
+                onClick={() => {
+                    setCountdownTo(duration / 1000);
+                    setInstance(Date.now);
+                }}
                 sx={{
                     flexShrink: 0,
                     whiteSpace: 'nowrap'

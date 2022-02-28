@@ -146,6 +146,12 @@ const App = () => {
         ]);
     }, []);
 
+    const onUpdateExerciseRecord = useCallback((data) => {
+        setExerciseRecords([
+            ...DataService.updateExerciseRecord(data)
+        ]);
+    }, []);
+
     const onRemoveExerciseRecord = useCallback(record_id => {
         setExerciseRecords([
             ...DataService.deleteExerciseRecord(record_id)
@@ -408,6 +414,7 @@ const App = () => {
                         exerciseRecordsById={exerciseRecordsById}
                         exerciseRecordsBySessionId={exerciseRecordsBySessionId}
                         onAddExerciseToSession={onAddExerciseToSession}
+                        onUpdateExerciseRecord={onUpdateExerciseRecord}
                         onRemoveExerciseRecord={onRemoveExerciseRecord}
                         onAddSet={onAddSet}
                         sets={exerciseSets}

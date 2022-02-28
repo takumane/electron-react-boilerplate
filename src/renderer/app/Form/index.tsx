@@ -19,6 +19,7 @@ type FormFieldDef = {
     label?: string,
     value?: any,
     width?: any,
+    displayOnly?: boolean,
     type: 'text' | 'date' | 'number' | 'exercise' | 'hidden'
 }
 
@@ -137,7 +138,8 @@ const Form = (props: FormProps) => {
                                     id={domId}
                                     label={`${fieldDef.label}`}
                                     type={fieldDef.type}
-                                    variant='outlined'
+                                    disabled={fieldDef.displayOnly}
+                                    variant={'outlined'}
                                     fullWidth={!fieldDef.width}
                                     InputLabelProps={{ shrink: true }}
                                     InputProps={{

@@ -16,6 +16,8 @@ import CardContent from '@mui/material/CardContent';
 import Form from '../Form';
 import DataService from 'renderer/services/data';
 import Timer from '../Timer';
+import TextField from '@mui/material/TextField';
+import { repMaxPercentage } from '../analysis';
 
 const SET_FIELD_WIDTH = 70;
 
@@ -29,6 +31,9 @@ type TrainingLogProps = {
     onAddExerciseToSession: (
         exercise_name: string,
         training_session_id: string
+    ) => void,
+    onUpdateExerciseRecord: (
+        data: any
     ) => void,
     onRemoveExerciseRecord: (record_id: number) => void,
     sets: ExerciseSet[],
@@ -204,7 +209,30 @@ const TrainingLog = (props: TrainingLogProps) => {
                                 const exercise_record = props.exerciseRecordsById[record_id];
                                         
                                 return <fieldset className={styles.exercise_record}>
-                                    <legend>{exercise_record?.exercise_name} <Button size='small' variant='text' onClick={() => props.onRemoveExerciseRecord(record_id)}>remove</Button></legend>
+                                    <legend>
+                                        {exercise_record?.exercise_name}&nbsp;&nbsp;
+                                        <Form 
+                                            id={`modify-exercise-record-${exercise_record?.id}`} 
+                                            direction={'row'} 
+                                            size='small'
+                                            fields={[{
+                                                name: 'training_max',
+                                                label: 'Training max',
+                                                type: 'number',
+                                                width: 100,
+                                                value: exercise_record?.training_max || 0
+                                            }, {
+                                                name: 'id',
+                                                type: 'hidden',
+                                                value: exercise_record?.id || ''
+                                            }]}
+                                            onSubmit={props.onUpdateExerciseRecord}
+                                            submitOnChange={true}
+                                        />&nbsp;&nbsp;
+                                        <Button size='small' variant='text' onClick={() => props.onRemoveExerciseRecord(record_id)}>
+                                            remove
+                                        </Button>
+                                    </legend>
                                     <div>
                                         {exercise_record?.sets?.map((set_id) => {
                                             const _set = props.setsById[set_id];
@@ -257,6 +285,20 @@ const TrainingLog = (props: TrainingLogProps) => {
                                                     onSubmit={props.onUpdateSet}
                                                     submitOnChange={true}
                                                 />
+                                                {exercise_record.training_max > 0 && <TextField 
+                                                    size='small' 
+                                                    sx={{
+                                                        ml: 2,
+                                                        width: 130
+                                                    }} 
+                                                    variant='outlined' 
+                                                    label={'intensity (relative)'} 
+                                                    className={styles.intensity} 
+                                                    defaultValue={`${(_set.load / exercise_record.training_max * 100).toFixed()}% (${(_set.load / (repMaxPercentage[_set.reps] * exercise_record.training_max) * 100 ).toFixed()}%)`}
+                                                    InputProps={{
+                                                        readOnly: true
+                                                    }}
+                                                />}
                                                 <IconButton onClick={() => props.onRemoveSet(set_id, record_id)}><DeleteIcon/></IconButton>
                                             </Box>
                                         })}

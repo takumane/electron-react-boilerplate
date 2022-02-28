@@ -143,9 +143,22 @@ export default class DataService {
         exercise_records.push({
             id: exercise_record_index_counter++,
             exercise_name,
+            training_max: 0,
             training_session_id,
             sets: []
         });
+
+        DataService.saveExerciseRecordsToFile();
+
+        return exercise_records;
+    }
+
+    static updateExerciseRecord = (data: ExerciseRecord) => {
+        const record = DataService.getExerciseRecordById(data.id);
+
+        if (record) {
+            record.training_max = data.training_max;
+        }
 
         DataService.saveExerciseRecordsToFile();
 

@@ -31,15 +31,16 @@ const store = new Store({
         }
       }
     },
-    exercise_record_index_counter: {type: 'number' },
+    exercise_record_index_counter: { type: 'number' },
     exercise_record: {
       type: 'array',
       items: {
         type: 'object',
         properties: {
-          id: { type: 'number' },
+          // id: { type: 'number' },
           training_session_id: { type: 'number' },
           exercise_name: { type: 'string' },
+          training_max: { type: 'number' },
           sets: {
             type: 'array',
             items: { type: 'number' }
