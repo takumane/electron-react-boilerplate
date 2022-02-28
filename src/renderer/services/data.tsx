@@ -37,6 +37,8 @@ let set_index_counter: number = window.electron.store.get(FILE_KEYS.SET_INDEX_CO
 
 console.log('Sets from file', sets);
 
+console.log('Exercise record from file', exercise_records);
+
 export default class DataService {
     static getExercises = () => {
         return exercises;
@@ -157,7 +159,7 @@ export default class DataService {
         const record = DataService.getExerciseRecordById(data.id);
 
         if (record) {
-            record.training_max = data.training_max;
+            record.training_max = Number(data.training_max);
         }
 
         DataService.saveExerciseRecordsToFile();
@@ -218,11 +220,11 @@ export default class DataService {
         const _set = DataService.getSetById(data.id);
 
         if (_set) {
-            _set.load = data.load;
-            _set.reps = data.reps;
-            _set.rpe = data.rpe;
-            _set.rpt = data.rpt;
-            _set.rest = data.rest;
+            _set.load = Number(data.load);
+            _set.reps = Number(data.reps);
+            _set.rpe = Number(data.rpe);
+            _set.rpt = Number(data.rpt);
+            _set.rest = Number(data.rest);
         }
 
         DataService.saveSetsToFile();

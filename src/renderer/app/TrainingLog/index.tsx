@@ -208,7 +208,7 @@ const TrainingLog = (props: TrainingLogProps) => {
                             {props.exerciseRecordsBySessionId[session.id]?.map(record_id => {
                                 const exercise_record = props.exerciseRecordsById[record_id];
                                         
-                                return <fieldset className={styles.exercise_record}>
+                                return <fieldset key={record_id} className={styles.exercise_record}>
                                     <legend>
                                         {exercise_record?.exercise_name}&nbsp;&nbsp;
                                         <Form 

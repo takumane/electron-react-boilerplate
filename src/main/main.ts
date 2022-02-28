@@ -17,6 +17,8 @@ import { resolveHtmlPath } from './util';
 
 import Store from 'electron-store';
 
+console.log(app.getPath('userData'));
+
 const store = new Store({
   schema: {
     exercise_index_counter: { type: 'number' },
