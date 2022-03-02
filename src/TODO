@@ -1,0 +1,15 @@
+Display estimate 1rm for each set
+
+Add note for each set for future reference
+
+Create Form for logging session.
+    Add utility to select percentage and autofill weight / reps
+
+Create form for logging body weight
+    Display nutrition requirement
+    Allow log meal and food database
+
+Create training dashboard.
+    Render training session dot on the calendar
+
+PERFORMANCE: Figure out why training log freezes the UI every onchange event

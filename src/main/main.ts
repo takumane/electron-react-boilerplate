@@ -21,6 +21,16 @@ console.log(app.getPath('userData'));
 
 const store = new Store({
   schema: {
+    body_weight: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          timestamp: { type: 'number' },
+          weight: { type: 'number' }
+        }
+      }
+    },
     exercise_index_counter: { type: 'number' },
     exercise: {
       type: 'array',
@@ -102,7 +112,9 @@ ipcMain.on('electron-store-get', async (event, val) => {
 });
 
 ipcMain.on('electron-store-set', async (event, key, val) => {
-  store.set(key, val);
+  setTimeout(() => {
+    store.set(key, val);
+  });
 });
 export default class AppUpdater {
   constructor() {
