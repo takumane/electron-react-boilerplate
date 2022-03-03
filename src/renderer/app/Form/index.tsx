@@ -139,7 +139,7 @@ const Form = (props: FormProps) => {
                                     label={`${fieldDef.label}`}
                                     type={fieldDef.type}
                                     disabled={fieldDef.displayOnly}
-                                    variant={'outlined'}
+                                    variant={'standard'}
                                     fullWidth={!fieldDef.width}
                                     InputLabelProps={{ shrink: true }}
                                     InputProps={{

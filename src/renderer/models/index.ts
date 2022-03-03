@@ -29,3 +29,8 @@ export type TrainingSession = {
     fatigue?: number,
     rating?: number,
 };
+
+export type BodyweightLog = {
+    weight?: number,
+    timestamp?: number
+}

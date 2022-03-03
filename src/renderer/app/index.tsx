@@ -40,7 +40,7 @@ import styles from './index.module.sass';
 import logo from './logo.svg';
 import TrainingLog from './TrainingLog';
 import DataService from '../services/data';
-import { Exercise, ExerciseRecord, ExerciseSet, TrainingSession } from '../models';
+import { BodyweightLog, Exercise, ExerciseRecord, ExerciseSet, TrainingSession } from '../models';
 import ExerciseDetails from './ExerciseDetails';
 
 // import Countdown from 'react-countdown';
@@ -229,13 +229,23 @@ const App = () => {
 
     const [ selectedDate, setSelectedDate ] = useState<Date | null>(new Date());
 
+    /** body weight */
+
+    const [ bodyweightLog, setBodyweightLog ] = useState<BodyweightLog[]>(DataService.getBodyweightLog());
+
+    const onLogBodyweight = useCallback(({weight} : {weight: number}) => {
+        setBodyweightLog([
+            ...DataService.logBodyweight(weight)
+        ]);
+    },[setBodyweightLog]);
+
     return <div>
         <Routes>
             <Route path='/' element={<div className={styles.root}>
                 <Box sx={{ p: 4, pt: 2, pb: 2, display: 'flex', alignItems: 'center', textAlign: 'center', marginBottom: 'auto', flexGrow: 0 }}>
                     <Breadcrumbs color='text.primary' aria-label="breadcrumb" separator={<NavigateNextIcon fontSize="small" />}>
                         {breadcrumbs.map(({ breadcrumb, match }) => <div key={match.pathname} onClick={() => navigate(match.pathname)}>{match.pathname === '/' ? <div className={styles.logo} onClick={() => { navigate('/'); }}>
-                        <img src={logo}/><div className={styles.name}>BETTERTHENYEZ</div>
+                        <img src={logo}/><div className={styles.name}>LOG3</div>
                     </div> :  breadcrumb}</div>)}
                     </Breadcrumbs>
                     <Button 
@@ -394,6 +404,27 @@ const App = () => {
                                         renderInput={(params) => <TextField {...params} />}
                                     />
                                 </LocalizationProvider>
+                            </Box>
+                            <Typography variant='h5'>
+                                Bodyweight
+                            </Typography>
+                            <Box sx={{
+                                p: 0
+                            }}>
+                                <Typography variant='h3' color='primary'>{bodyweightLog[bodyweightLog.length-1]?.weight || 0}kg <small>{new Date(bodyweightLog[bodyweightLog.length-1]?.timestamp || 0).toLocaleTimeString()}</small></Typography>
+                                <br/>
+                                <Form 
+                                    id='bodyweight-log'
+                                    submitLabel='Log'
+                                    size='small'
+                                    direction='row'
+                                    onSubmit={onLogBodyweight}
+                                    fields={[{
+                                        type: 'number',
+                                        label: 'weight',
+                                        name: 'weight'
+                                    }]}
+                                />
                             </Box>
                         </Box>
                         <Box sx={{ 

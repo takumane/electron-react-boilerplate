@@ -19,7 +19,7 @@ import Timer from '../Timer';
 import TextField from '@mui/material/TextField';
 import { repMaxPercentage } from '../analysis';
 
-const SET_FIELD_WIDTH = 90;
+const SET_FIELD_WIDTH = 60;
 
 type TrainingLogProps = {
     selectedDate: Date | null,
@@ -291,7 +291,7 @@ const TrainingLog = (props: TrainingLogProps) => {
                                                         ml: 2,
                                                         width: 130
                                                     }} 
-                                                    variant='outlined' 
+                                                    variant='standard' 
                                                     label={'intensity (relative)'} 
                                                     className={styles.intensity} 
                                                     defaultValue={`${(_set.load / exercise_record.training_max * 100).toFixed()}% (${(_set.load / (repMaxPercentage[_set.reps - 1] * exercise_record.training_max) * 100 ).toFixed()}%)`}

@@ -1,4 +1,4 @@
-import { TrainingSession, Exercise, ExerciseRecord, ExerciseSet } from "renderer/models";
+import { TrainingSession, Exercise, ExerciseRecord, ExerciseSet, BodyweightLog } from "renderer/models";
 
 declare global {
     interface Window {
@@ -13,6 +13,7 @@ declare global {
 }
 
 const FILE_KEYS = {
+    BODYWEIGHT: 'bodyweight',
     EXERCISE: 'exercise',
     EXERCISE_INDEX_COUNTER: 'exercise_index_counter',
     TRAINING_SESSION: 'training_session',
@@ -34,6 +35,8 @@ let exercise_record_index_counter: number = window.electron.store.get(FILE_KEYS.
 
 const sets: ExerciseSet[] = window.electron.store.get(FILE_KEYS.SET) || [];
 let set_index_counter: number = window.electron.store.get(FILE_KEYS.SET_INDEX_COUNTER);
+
+const bodyweightLog: BodyweightLog[] = window.electron.store.get(FILE_KEYS.BODYWEIGHT) || [];
 
 console.log('Sets from file', sets);
 
@@ -252,5 +255,36 @@ export default class DataService {
     static saveSetsToFile = () => {
         window.electron.store.set(FILE_KEYS.SET, sets);
         window.electron.store.set(FILE_KEYS.SET_INDEX_COUNTER, set_index_counter);
+    }
+
+    static getBodyweightLog = () => {
+        return bodyweightLog;
+    }
+
+    static logBodyweight = (weight: number) => {
+        bodyweightLog.push({
+            weight,
+            timestamp: Date.now()
+        });
+
+        DataService.saveBodyweightLogToFile();
+
+        return bodyweightLog;
+    }
+
+    static editBodyweight = (weight: number, timestamp: number) => {
+        const logItem = bodyweightLog.find(item => item.timestamp === timestamp);
+
+        if (logItem) {
+            logItem.weight = weight;
+        }
+
+        DataService.saveBodyweightLogToFile();
+
+        return bodyweightLog;
+    }
+
+    static saveBodyweightLogToFile = () => {
+        window.electron.store.set(FILE_KEYS.BODYWEIGHT, bodyweightLog);
     }
 }
