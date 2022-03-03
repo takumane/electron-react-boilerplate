@@ -42,6 +42,8 @@ import TrainingLog from './TrainingLog';
 import DataService from '../services/data';
 import { BodyweightLog, Exercise, ExerciseRecord, ExerciseSet, TrainingSession } from '../models';
 import ExerciseDetails from './ExerciseDetails';
+import { PickersDay } from '@mui/lab';
+import { Badge } from '@mui/material';
 
 // import Countdown from 'react-countdown';
 // import humanizeDuration from 'humanize-duration';
@@ -401,6 +403,22 @@ const App = () => {
                                         onChange={(day) => {
                                             setSelectedDate(day);
                                         }}
+                                        renderDay={(day, selectedDates, pickersDayProp) => {
+                                            console.log(day, DataService.getTrainingSessionByDate(day));
+
+                                            return <div key={day?.getTime()}>
+                                                {/* <Badge overlap='circular' anchorOrigin={{
+                                                    vertical: 'bottom',
+                                                    horizontal: 'right'
+                                                }} color='secondary' variant='dot' invisible={DataService.getTrainingSessionByDate(day).length <= 0}> */}
+                                                    <PickersDay {...pickersDayProp} sx={DataService.getTrainingSessionByDate(day).length > 0 ? {
+                                                        borderColor: 'primary.main',
+                                                        borderStyle: 'solid',
+                                                        borderWidth: 1
+                                                    } : undefined}/>
+                                                {/* </Badge> */}
+                                            </div>;
+                                        }}
                                         renderInput={(params) => <TextField {...params} />}
                                     />
                                 </LocalizationProvider>
@@ -412,7 +430,10 @@ const App = () => {
                                 p: 0
                             }}>
                                 <Typography variant='h3' color='primary'>{bodyweightLog[bodyweightLog.length-1]?.weight || 0}kg <small>{new Date(bodyweightLog[bodyweightLog.length-1]?.timestamp || 0).toLocaleTimeString()}</small></Typography>
-                                <br/>
+                                <Divider sx={{
+                                    mt: 2,
+                                    mb: 2
+                                }}/>
                                 <Form 
                                     id='bodyweight-log'
                                     submitLabel='Log'
@@ -425,6 +446,14 @@ const App = () => {
                                         name: 'weight'
                                     }]}
                                 />
+                                <Divider sx={{
+                                    mt: 2,
+                                    mb: 2
+                                }}/>
+                                <Typography variant='h7'>TDEE: {Math.ceil(Number(bodyweightLog[bodyweightLog.length-1]?.weight) * 2.2 * 16)}Cal</Typography>
+                                <Typography variant='body1'>Protein: {Math.ceil(Number(bodyweightLog[bodyweightLog.length-1]?.weight) * 2.2)}g</Typography>
+                                <Typography variant='body1'>Fat: {Math.ceil(Number(bodyweightLog[bodyweightLog.length-1]?.weight) * 1)}g</Typography>
+                                <Typography variant='body1'>Carb: {Math.floor(Number(bodyweightLog[bodyweightLog.length-1]?.weight) * (2.2 * 16 - 2.2 * 4 - 9) / 4)}g</Typography>
                             </Box>
                         </Box>
                         <Box sx={{ 

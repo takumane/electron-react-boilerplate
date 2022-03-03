@@ -97,7 +97,7 @@ export default class DataService {
     }
 
     static getTrainingSessionByDate = (date: Date | null) => {
-        return training_sessions.filter((session) => (new Date(session.startTime)).getDate() === date?.getDate());
+        return training_sessions.filter((session) => (new Date(session.startTime)).toLocaleDateString() === date?.toLocaleDateString());
     }
 
     static createTrainingSession = (timestamp: number) => {
