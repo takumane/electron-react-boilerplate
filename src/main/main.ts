@@ -21,6 +21,22 @@ console.log(app.getPath('userData'));
 
 const store = new Store({
   schema: {
+    rpe_chart_bookmarked_exercise_id: {
+      type: 'array',
+      items: { type: 'number' }
+    },
+    rpe_chart: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          exercise_id: { type: 'number' },
+          reps: { type: 'number' },
+          rpe: { type: 'number' },
+          percentage: { type: 'number' }
+        }
+      }
+    },
     body_weight: {
       type: 'array',
       items: {
@@ -39,7 +55,7 @@ const store = new Store({
         properties: {
           id: { type: 'number' },
           name: { type: 'string' },
-          desc: { type: 'string' }
+          desc: { type: 'string' },
         }
       }
     },
@@ -104,6 +120,14 @@ if (!store.get('exercise_record_index_counter')) {
 
 if (!store.get('set_index_counter')) {
   store.set('set_index_counter', 1);
+}
+
+if (!store.get('rpe_chart')) {
+  store.set('rpe_chart', []);
+}
+
+if (!store.get('rpe_chart_bookmarked_exercise_id')) {
+  store.set('rpe_chart_bookmarked_exercise_id', []);
 }
 
 // IPC listener

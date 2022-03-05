@@ -1,4 +1,4 @@
-import { TrainingSession, Exercise, ExerciseRecord, ExerciseSet, BodyweightLog } from "renderer/models";
+import { TrainingSession, Exercise, ExerciseRecord, ExerciseSet, BodyweightLog, RPEChartRecord } from "renderer/models";
 
 declare global {
     interface Window {
@@ -21,7 +21,9 @@ const FILE_KEYS = {
     EXERCISE_RECORD: 'exercise_record',
     EXERCISE_RECORD_INDEX_COUNTER: 'exercise_record_index_counter',
     SET: 'set',
-    SET_INDEX_COUNTER: 'set_index_counter'
+    SET_INDEX_COUNTER: 'set_index_counter',
+    RPE_CHART: 'rpe_chart',
+    RPE_CHART_BOOKMARKED_EXERCISE_IDS: 'rpe_chart_bookmarked_exercise_id'
 }
 
 const exercises: Exercise[] = window.electron.store.get(FILE_KEYS.EXERCISE) || [];
@@ -37,6 +39,10 @@ const sets: ExerciseSet[] = window.electron.store.get(FILE_KEYS.SET) || [];
 let set_index_counter: number = window.electron.store.get(FILE_KEYS.SET_INDEX_COUNTER);
 
 const bodyweightLog: BodyweightLog[] = window.electron.store.get(FILE_KEYS.BODYWEIGHT) || [];
+
+const rpeChart: RPEChartRecord[] =  window.electron.store.get(FILE_KEYS.RPE_CHART) || []; 
+
+const rpeChartBookmarkedExerciseIds: Exercise['id'][] = window.electron.store.get(FILE_KEYS.RPE_CHART_BOOKMARKED_EXERCISE_IDS) || [];
 
 console.log('Sets from file', sets);
 
@@ -286,5 +292,29 @@ export default class DataService {
 
     static saveBodyweightLogToFile = () => {
         window.electron.store.set(FILE_KEYS.BODYWEIGHT, bodyweightLog);
+    }
+
+    static getPercentageByRepsAndRPE = (reps: number, rpe: number) => {
+        return rpeChart.find(record => record.reps === reps && record.rpe === rpe);
+    }
+
+    static getRPEChartBookmarkedExerciseIds = () => {
+        return rpeChartBookmarkedExerciseIds;
+    }
+
+    static toggleExerciseBookmarkForRPEChart = (id: Exercise['id']) => {
+        if (!rpeChartBookmarkedExerciseIds.includes(id)) {
+            rpeChartBookmarkedExerciseIds.push(id);
+        } else {
+            rpeChartBookmarkedExerciseIds.splice(rpeChartBookmarkedExerciseIds.indexOf(id), 1);
+        }
+
+        DataService.saveRPEChartBookmarkedExerciseIdsToFile();
+
+        return rpeChartBookmarkedExerciseIds;
+    }
+
+    static saveRPEChartBookmarkedExerciseIdsToFile = () => {
+        window.electron.store.set(FILE_KEYS.RPE_CHART_BOOKMARKED_EXERCISE_IDS, rpeChartBookmarkedExerciseIds);
     }
 }

@@ -44,6 +44,7 @@ import { BodyweightLog, Exercise, ExerciseRecord, ExerciseSet, TrainingSession }
 import ExerciseDetails from './ExerciseDetails';
 import { PickersDay } from '@mui/lab';
 import { Badge } from '@mui/material';
+import RPEChart from './RPEChart';
 
 // import Countdown from 'react-countdown';
 // import humanizeDuration from 'humanize-duration';
@@ -66,13 +67,17 @@ import { Badge } from '@mui/material';
 
 const paths = {
     exercises: {
-        root: 'exercises'
+        root: 'exercises',
+        rpe: 'rpe/:name'
     },
     injuries: {
         root: 'injuries'
     },
     training: {
         root: 'training'
+    },
+    RPEChart: {
+        root: 'rpe-chart',
     },
     records: {
 
@@ -366,6 +371,12 @@ const App = () => {
                         Injuries log
                     </Button>
                     <Button sx={{
+                        marginLeft: 1,
+                        color: 'inherit'
+                    }} variant='text' onClick={() => navigate(paths.RPEChart.root)}>
+                        RPE Chart
+                    </Button>
+                    <Button sx={{
                         marginLeft: 1
                     }} variant='outlined' onClick={() => navigate(paths.training.root)}>
                         Training log
@@ -404,7 +415,7 @@ const App = () => {
                                             setSelectedDate(day);
                                         }}
                                         renderDay={(day, selectedDates, pickersDayProp) => {
-                                            console.log(day, DataService.getTrainingSessionByDate(day));
+                                            // console.log(day, DataService.getTrainingSessionByDate(day));
 
                                             return <div key={day?.getTime()}>
                                                 {/* <Badge overlap='circular' anchorOrigin={{
@@ -464,6 +475,7 @@ const App = () => {
                     </Box>
                 </Box>
             </div>}>
+                <Route path={paths.RPEChart.root} element={<RPEChart exercises={exercises}/>}/>
                 <Route path={paths.exercises.root + '/:id'} element={<ExerciseDetails/>}/>
                 <Route path={paths.training.root} element={
                     <TrainingLog

@@ -34,3 +34,10 @@ export type BodyweightLog = {
     weight?: number,
     timestamp?: number
 }
+
+export type RPEChartRecord = {
+    exercise_id: Exercise['id'],
+    reps: number,
+    rpe: number,
+    percentage: number
+}

@@ -13,8 +13,9 @@ import Autocomplete from '@mui/material/Autocomplete';
 import DataService from 'renderer/services/data';
 
 import styles from './Form.module.sass';
+import ExerciseAutocomplete from '../ExerciseAutocomplete';
 
-type FormFieldDef = {
+export type FormFieldDef = {
     name: string,
     label?: string,
     value?: any,
@@ -35,7 +36,7 @@ type FormProps = {
 }
 
 const Form = (props: FormProps) => {
-    const { register, control, handleSubmit, watch, formState: { errors } } = useForm();
+    const { register, control, handleSubmit, watch, formState: { errors }, setValue, reset } = useForm();
 
 
     const onFormSubmit = useCallback((data: any) => {
@@ -48,13 +49,14 @@ const Form = (props: FormProps) => {
         return false;
     },[props.fields]);
 
-
     useEffect(() => {
         if (props.submitOnChange) {
             const subscription = watch(() => handleSubmit(onFormSubmit)());
             return () => subscription.unsubscribe();
         }
     }, [watch]);
+
+    console.log(`Form ${props.id} rendered`, props.fields);
 
     return <Box component='form' onSubmit={handleSubmit(onFormSubmit)} className={styles.container}>
         {props.title && <Typography variant='h6'>{props.title}</Typography>}
@@ -96,42 +98,9 @@ const Form = (props: FormProps) => {
                                 </LocalizationProvider>;
                             }
                             case 'exercise' : {
-                                return <Autocomplete
-                                    disablePortal
-                                    fullWidth={true}
-                                    id="exercises"
-                                    sx={{
-                                        minWidth: 300
-                                    }}
-                                    options={DataService.getExercises()}
-                                    {...field}
-                                    onChange={(event, value) => {
-                                        field.onChange({
-                                            target: {
-                                                value
-                                            }
-                                        });
-                                    }}
-                                    renderInput={(params) => <TextField 
-                                        {...params} 
-                                        label="Search exercises"
-                                        InputLabelProps={{ shrink: true }}
-                                        InputProps={{
-                                            ...params.InputProps,
-                                            classes: {
-                                                root: styles.textFieldRoot,
-                                                notchedOutline: styles.textFieldOutline
-                                            },
-                                        }}
-                                        inputProps={{
-                                            ...params.inputProps,
-                                            autoComplete: 'new-password', // disable autocomplete and autofill
-                                        }}
-                                        size={inputSize}
-                                    />}
-                                    placeholder={'Search exercise'}
-                                    getOptionLabel={(option) => option.name}
-                                />
+                                console.log(`Form ${props.id} rendered exercise autocomplete`, fieldDef.value, field);
+
+                                return <ExerciseAutocomplete field={field}/>;
                             }
                             default : {
                                 return <TextField 
@@ -145,7 +114,7 @@ const Form = (props: FormProps) => {
                                     InputProps={{
                                         classes: {
                                             root: styles.textFieldRoot,
-                                            notchedOutline: styles.textFieldOutline
+                                            // notchedOutline: styles.textFieldOutline
                                         }
                                     }}
                                     {...field}
